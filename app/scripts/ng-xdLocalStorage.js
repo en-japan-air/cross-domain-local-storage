@@ -6,15 +6,7 @@
 
 angular.module('xdLocalStorage', [])
   .service('xdLocalStorage', ['$q', '$rootScope', function ($q, $rootScope) {
-    var iframeReady = false;
     var apiReady = $q.defer();
-
-    var unregister = $rootScope.$watch(function () {
-      return iframeReady;
-    }, function () {
-      apiReady.resolve(true);
-      unregister();
-    });
 
     function waitForApi() {
       if (!xdLocalStorage.wasInit()) {
@@ -40,7 +32,7 @@ angular.module('xdLocalStorage', [])
         var defer = $q.defer();
         options.initCallback = function () {
           $rootScope.$apply(function () {
-            iframeReady = true;
+            apiReady.resolve(true);
             defer.resolve();
           });
         };
